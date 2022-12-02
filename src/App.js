@@ -1,25 +1,28 @@
-import logo from './logo.svg';
-import './App.css';
+import React, { useEffect, useState } from "react";
+import { BrowserRouter, Route, Routes } from "react-router-dom";
+import AddApartmentPage from "./pages/AddApartmentPage";
+import ApartmentsPage from "./pages/ApartmentsPage";
+import axios from "axios";
 
-function App() {
+const App = () => {
+  const [apartments, setAppartment] = useState([]);
+
+  useEffect(() => {
+    axios
+      .get("https://ironbnb-m3.herokuapp.com/apartments")
+      .then((response) => {
+        setAppartment(response.data);
+      });
+  }, []);
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <BrowserRouter>
+      <Routes>
+        <Route path="/" element={<ApartmentsPage apartments={apartments} />} />
+        <Route path="/add" element={<AddApartmentPage />} />
+      </Routes>
+    </BrowserRouter>
   );
-}
+};
 
 export default App;
